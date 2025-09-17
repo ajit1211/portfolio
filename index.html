@@ -10,122 +10,440 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 
   <!-- AOS (scroll animations) -->
   <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
 
-  <!-- Custom Inline CSS (you can move to static/css/style.css) -->
+  <!-- GSAP for advanced animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <!-- Particles.js for hero background -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+  <!-- Custom Inline CSS -->
   <style>
-    :root{
-      --bg-dark: #0b0b0b;
-      --card-dark: #2c2c2c;
-      --muted: #6c757d;
-      --accent: #ffd400; /* yellow */
+    :root {
+      --bg-dark: #0a0a0a;
+      --bg-darker: #000;
+      --card-dark: #1a1a1a;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0a0;
+      --accent: #ffd400;
+      --accent-dark: #ffaa00;
+      --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --shadow-soft: 0 10px 30px rgba(0,0,0,0.3);
+      --shadow-glow: 0 0 20px rgba(255, 212, 0, 0.2);
+    }
+
+    [data-bs-theme="dark"] {
+      --bg-dark: #ffffff;
+      --bg-darker: #f8f9fa;
+      --card-dark: #e9ecef;
+      --text-primary: #212529;
+      --text-secondary: #6c757d;
+      --accent: #ff6b35;
+      --accent-dark: #e55a2b;
     }
 
     html { scroll-behavior: smooth; }
-    body { font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: white; color: #222; }
-
-    /* --- Navbar --- */
-    .navbar { background: var(--bg-light); }
-    .navbar-brand { font-weight: 600; }
-    .nav-link { cursor: pointer; }
-
-    /* --- Hero --- */
-    #hero { padding: 4.5rem 0; text-align:center; background: linear-gradient(180deg,#fff 0%, #f8f9fa 100%); }
-    #hero img { object-fit: cover; }
-
-    /* --- Section Titles --- */
-    section h2 { font-weight: 700; margin-bottom: 1.5rem; }
-    /* Muted lead text */
-    .lead.muted { color: var(--muted); }
-
-    /* --- Skills (styled to match screenshot) --- */
-    #skills { background: var(--bg-dark); padding: 3.5rem 0; color: #fff; }
-    #skills .section-title { color: var(--accent); text-shadow: 0 3px 14px rgba(0,0,0,0.6); font-size: 2rem; margin-bottom: 2rem; }
-
-    .skills-grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px 28px;
-      align-items: stretch;
-      padding: 0 12px;
+    body { 
+      font-family: 'Inter', sans-serif; 
+      background: var(--bg-dark); 
+      color: var(--text-primary); 
+      overflow-x: hidden;
+      position: relative;
     }
 
+    /* Custom Cursor */
+    body { cursor: none; }
+    .cursor {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      background: var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      mix-blend-mode: difference;
+      transition: transform 0.1s ease;
+    }
+    .cursor-follower {
+      position: fixed;
+      width: 40px;
+      height: 40px;
+      border: 2px solid var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transition: all 0.3s ease;
+    }
+    .hover { transform: scale(1.5); }
+
+    /* Navbar */
+    .navbar { 
+      background: rgba(10,10,10,0.95); 
+      backdrop-filter: blur(20px); 
+      border-bottom: 1px solid rgba(255,212,0,0.1);
+    }
+    [data-bs-theme="dark"] .navbar { 
+      background: rgba(248,249,250,0.95); 
+      border-bottom: 1px solid rgba(255,107,53,0.1);
+    }
+    .navbar-brand { 
+      font-family: 'Space Grotesk', sans-serif; 
+      font-weight: 700; 
+      background: var(--gradient-primary); 
+      -webkit-background-clip: text; 
+      -webkit-text-fill-color: transparent; 
+    }
+    .nav-link { 
+      position: relative; 
+      transition: color 0.3s ease; 
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after { width: 100%; }
+
+    /* Hero */
+    #hero { 
+      position: relative; 
+      min-height: 100vh; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      overflow: hidden;
+      background: var(--gradient-primary);
+    }
+    #particles-js { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+    .hero-content { 
+      position: relative; 
+      z-index: 2; 
+      text-align: center; 
+      animation: fadeInUp 1s ease;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    #hero img { 
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3)); 
+      border: 4px solid rgba(255,255,255,0.2);
+      transition: transform 0.5s ease;
+    }
+    #hero img:hover { transform: scale(1.05) rotate(5deg); }
+    .hero-buttons .btn { 
+      position: relative; 
+      overflow: hidden; 
+      transition: all 0.3s ease;
+    }
+    .hero-buttons .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+    .hero-buttons .btn:hover::before { left: 100%; }
+
+    /* Section Titles */
+    section h2 { 
+      font-family: 'Space Grotesk', sans-serif; 
+      font-weight: 800; 
+      position: relative; 
+      display: inline-block;
+    }
+    section h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+    .lead.muted { color: var(--text-secondary); }
+
+    /* Skills */
+    #skills { 
+      background: var(--bg-darker); 
+      padding: 5rem 0; 
+      position: relative;
+    }
+    #skills::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    }
+    .section-title { 
+      color: var(--accent); 
+      text-shadow: 0 0 30px var(--shadow-glow); 
+      font-size: 2.5rem; 
+    }
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 2rem;
+      padding: 2rem 0;
+    }
     .skill-tile {
       background: var(--card-dark);
-      width: 150px;
-      min-height: 150px;
-      border-radius: 12px;
+      border-radius: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 18px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.45);
-      transition: transform .28s ease, box-shadow .28s ease, background .28s ease;
-      text-align: center;
-      color: #fff;
+      padding: 2rem 1.5rem;
+      box-shadow: var(--shadow-soft);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
     }
-
+    .skill-tile::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--gradient-primary);
+    }
     .skill-tile .icon-wrap {
-      width: 72px;
-      height: 72px;
+      width: 80px;
+      height: 80px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 12px;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.03);
+      margin-bottom: 1rem;
+      border-radius: 50%;
+      background: rgba(255,212,0,0.1);
+      transition: all 0.3s ease;
     }
-
     .skill-tile img {
-      width: 44px;
-      height: 44px;
+      width: 48px;
+      height: 48px;
       object-fit: contain;
-      display: block;
+      filter: brightness(1.2);
     }
-
     .skill-tile .skill-name {
-      font-weight: 700;
-      font-size: 15px;
-      letter-spacing: 0.2px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+    .skill-level {
+      width: 100%;
+      height: 4px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: auto;
+    }
+    .skill-progress {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: width 1s ease;
+      width: 0; /* Animated via JS */
+    }
+    .skill-tile:hover {
+      transform: translateY(-15px) rotateX(5deg);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4), var(--shadow-glow);
+    }
+    .skill-tile:hover .icon-wrap { 
+      background: rgba(255,212,0,0.2); 
+      transform: rotate(360deg);
     }
 
-    .skill-tile:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 18px 40px rgba(255, 212, 64, 0.12), 0 6px 18px rgba(0,0,0,0.6);
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    /* Projects */
+    #projects .card {
+      border: none;
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      background: var(--card-dark);
+    }
+    .project-img { 
+      height: 200px; 
+      object-fit: cover; 
+      transition: transform 0.6s ease;
+    }
+    .project-img:hover { transform: scale(1.1); }
+    .card-body { 
+      padding: 1.5rem; 
+      position: relative;
+    }
+    .tech-badges {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    .tech-badge {
+      background: var(--gradient-secondary);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    /* Timeline for Internships & Education */
+    .timeline {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 2px;
+      background: var(--accent);
+      transform: translateX(-50%);
+    }
+    .timeline-item {
+      position: relative;
+      margin: 2rem 0;
+      width: 50%;
+    }
+    .timeline-item:nth-child(odd) { left: 0; }
+    .timeline-item:nth-child(even) { left: 50%; }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      right: -22px;
+      width: 20px;
+      height: 20px;
+      background: var(--accent);
+      border-radius: 50%;
+      z-index: 1;
+    }
+    .timeline-item:nth-child(even)::before {
+      left: -22px;
+      right: auto;
+    }
+    .timeline-content {
+      background: var(--card-dark);
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+    }
+    .timeline-content::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      width: 0;
+      height: 0;
+      border: 10px solid transparent;
+    }
+    .timeline-item:nth-child(odd) .timeline-content::before {
+      right: -20px;
+      border-left-color: var(--card-dark);
+    }
+    .timeline-item:nth-child(even) .timeline-content::before {
+      left: -20px;
+      border-right-color: var(--card-dark);
+    }
+
+    /* Certifications - Add hover effects */
+    .cert-img { 
+      height: 200px; 
+      object-fit: cover; 
+      transition: transform 0.4s ease;
+    }
+    .cert-img:hover { transform: scale(1.05); }
+
+    /* Testimonials - Enhanced Carousel */
+    .carousel-item blockquote {
+      background: var(--card-dark);
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: var(--shadow-soft);
+      border-left: 4px solid var(--accent);
+    }
+    .blockquote-footer {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* Contact - Add map placeholder */
+    #contact form { max-width: 600px; margin: 0 auto; }
+    .contact-map {
+      height: 300px;
+      background: var(--gradient-primary);
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+      margin-top: 2rem;
+    }
+
+    /* Footer */
+    footer { 
+      background: var(--bg-darker); 
+      border-top: 1px solid rgba(255,212,0,0.1);
+    }
+    .social-link { 
+      transition: color 0.3s ease; 
+    }
+    .social-link:hover { color: var(--accent) !important; transform: translateY(-2px); }
+
+    /* Back to Top */
+    #back-to-top { 
+      background: var(--gradient-primary); 
+      border: none;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      box-shadow: var(--shadow-soft);
     }
 
     /* Responsive */
-    @media (max-width: 576px) {
-      .skill-tile { width: 120px; min-height: 130px; padding: 14px; }
-      .skill-tile .icon-wrap { width: 60px; height: 60px; }
-      .skill-tile img { width: 36px; height: 36px; }
+    @media (max-width: 768px) {
+      .timeline::before { left: 20px; }
+      .timeline-item { width: 100%; left: 0 !important; }
+      .timeline-item::before { left: 18px !important; right: auto; }
+      .timeline-item:nth-child(even)::before { left: 18px !important; }
+      .timeline-content::before { left: 18px !important; border-left-color: transparent !important; border-right-color: var(--card-dark) !important; right: auto !important; }
     }
 
-    /* --- Projects small tweaks --- */
-    .project-img { transition: transform 0.4s ease; border-radius: 6px; }
-    .project-img:hover { transform: scale(1.03); }
-    .card-body { transition: background .25s ease; }
-
-    /* --- Footer --- */
-    footer { background: #f8f9fa; }
-
-    /* --- Back to top --- */
-    #back-to-top { position: fixed; right: 22px; bottom: 22px; z-index: 999; display: none; }
-
-    /* Small utility */
-    .muted-text { color: var(--muted); }
+    /* Animations */
+    .fade-in { opacity: 0; transform: translateY(50px); transition: all 0.8s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
   </style>
 </head>
-<body class="d-flex flex-column min-vh-100" data-bs-theme="light" data-bs-spy="scroll" data-bs-target="#nav" data-bs-offset="70" tabindex="0">
+<body data-bs-theme="dark" data-bs-spy="scroll" data-bs-target="#nav" data-bs-offset="70">
+
+  <!-- Custom Cursor -->
+  <div class="cursor"></div>
+  <div class="cursor-follower"></div>
 
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg border-bottom sticky-top shadow-sm bg-body">
+  <nav class="navbar navbar-expand-lg border-bottom sticky-top" id="navbar">
     <div class="container">
       <a class="navbar-brand" href="#hero">Ajit.dev</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
@@ -136,125 +454,131 @@
           <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
           <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
           <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
-          <li class="nav-item"><a class="nav-link" href="#internships">Internships</a></li>
+          <li class="nav-item"><a class="nav-link" href="#experience">Experience</a></li>
           <li class="nav-item"><a class="nav-link" href="#certifications">Certifications</a></li>
-          <li class="nav-item"><a class="nav-link" href="#education">Education</a></li>
           <li class="nav-item"><a class="nav-link" href="#testimonials">Testimonials</a></li>
           <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
         </ul>
-
         <button id="theme-toggle" class="btn btn-sm ms-3" aria-label="Toggle theme">
-          <i class="bi bi-moon-fill light-icon" style="display:inline-block;"></i>
-          <i class="bi bi-sun-fill dark-icon" style="display:none;"></i>
+          <i class="bi bi-moon-fill light-icon" style="display:none;"></i>
+          <i class="bi bi-sun-fill dark-icon" style="display:inline-block;"></i>
         </button>
       </div>
     </div>
   </nav>
 
   <!-- Hero -->
-  <header id="hero" class="py-5 text-center">
-    <div class="container">
-      <img src="static/image/ajit.jpg" alt="Ajit Pandey" class="rounded-circle mb-3 shadow-lg border border-3 border-white" width="180" height="180">
-      <h1 class="fw-bold">Ajit Pandey</h1>
-      <p class="lead muted-text"><span id="typed"></span></p>
-
-      <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
-        <a href="#projects" class="btn btn-primary px-4 shadow-sm">🚀 View My Work</a>
-        <a href="#contact" class="btn btn-outline-secondary px-4 shadow-sm">📩 Contact Me</a>
-        <a href="static/resume/resume_ajitpandey_2002_latest.pdf" download class="btn btn-success px-4 shadow-sm">📄 Download Resume</a>
+  <header id="hero">
+    <div id="particles-js"></div>
+    <div class="hero-content container">
+      <img src="static/image/ajit.jpg" alt="Ajit Pandey" class="rounded-circle mb-4 shadow-lg" width="200" height="200">
+      <h1 class="display-3 fw-bold mb-3" style="font-family: 'Space Grotesk', sans-serif;">Ajit Pandey</h1>
+      <p class="lead mb-4" style="font-size: 1.5rem;"><span id="typed"></span></p>
+      <div class="hero-buttons d-flex justify-content-center gap-3 flex-wrap">
+        <a href="#projects" class="btn btn-primary px-5 py-3 fs-5 shadow">🚀 View My Work</a>
+        <a href="#contact" class="btn btn-outline-light px-5 py-3 fs-5 shadow">📩 Contact Me</a>
+        <a href="static/resume/resume_ajitpandey_2002_latest.pdf" download class="btn btn-success px-5 py-3 fs-5 shadow">📄 Download Resume</a>
       </div>
     </div>
   </header>
 
   <!-- About -->
   <section id="about" class="py-5">
-    <div class="container" data-aos="fade-up">
-      <h2 class="text-center">About Me</h2>
-      <p class="text-muted mx-auto lead" style="max-width: 800px;">
-        I am Ajit Pandey, a passionate full-stack developer with expertise in Django, Python, SQL, JavaScript, and React (MERN Stack).
-        I love building clean, scalable, and user-friendly applications. Currently, I am pursuing professional software development training at IT Vedant.
-      </p>
+    <div class="container fade-in" data-aos="fade-up">
+      <h2 class="text-center mb-5">About Me</h2>
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <p class="lead" style="max-width: 500px;">
+            I am Ajit Pandey, a passionate full-stack developer with expertise in Django, Python, SQL, JavaScript, and React (MERN Stack).
+            I love building clean, scalable, and user-friendly applications. Currently, I am pursuing professional software development training at IT Vedant.
+          </p>
+          <div class="mt-4">
+            <h5>Quick Stats</h5>
+            <div class="row text-center">
+              <div class="col-3"><div class="h2" id="projects-count">3</div><div>Projects</div></div>
+              <div class="col-3"><div class="h2" id="skills-count">9</div><div>Skills</div></div>
+              <div class="col-3"><div class="h2" id="internships-count">2</div><div>Internships</div></div>
+              <div class="col-3"><div class="h2" id="certs-count">3</div><div>Certs</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 text-center">
+          <img src="static/image/ajit.jpg" alt="Ajit Pandey" class="img-fluid rounded shadow" style="max-width: 300px;">
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- Skills (final, polished) -->
-  <section id="skills" aria-label="Skills">
+  <!-- Skills -->
+  <section id="skills">
     <div class="container" data-aos="fade-up">
-      <div class="text-center">
+      <div class="text-center mb-5">
         <h2 class="section-title">My Skills</h2>
+        <p class="lead muted">Hover to see proficiency levels</p>
       </div>
-
-      <div class="skills-grid mt-4" role="list">
-        <!-- HTML -->
-        <div class="skill-tile" role="listitem" data-aos="zoom-in" data-aos-delay="50">
+      <div class="skills-grid">
+        <div class="skill-tile" data-skill="90">
           <div class="icon-wrap">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5 icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5">
           </div>
           <div class="skill-name">HTML</div>
+          <div class="skill-level"><div class="skill-progress"></div></div>
         </div>
-
-        <!-- CSS -->
-        <div class="skill-tile" role="listitem" data-aos="zoom-in" data-aos-delay="80">
+        <div class="skill-tile" data-skill="85">
           <div class="icon-wrap">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3 icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3">
           </div>
           <div class="skill-name">CSS</div>
+          <div class="skill-level"><div class="skill-progress"></div></div>
         </div>
-
-        <!-- Bootstrap -->
-        <div class="skill-tile" role="listitem" data-aos="zoom-in" data-aos-delay="110">
+        <div class="skill-tile" data-skill="80">
           <div class="icon-wrap">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" alt="Bootstrap icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" alt="Bootstrap">
           </div>
           <div class="skill-name">Bootstrap</div>
+          <div class="skill-level"><div class="skill-progress"></div></div>
         </div>
-
-        <!-- JavaScript -->
-        <div class="skill-tile" role="listitem" data-aos="zoom-in" data-aos-delay="140">
+        <div class="skill-tile" data-skill="75">
           <div class="icon-wrap">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript">
           </div>
           <div class="skill-name">JavaScript</div>
+          <div class="skill-level"><div class="skill-progress"></div></div>
         </div>
-
-        <!-- React -->
-        <div class="skill-tile" role="listitem" data-aos="zoom-in" data-aos-delay="170">
+        <div class="skill-tile" data-skill="70">
           <div class="icon-wrap">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React">
           </div>
           <div class="skill-name">React</div>
+          <div class="skill-level"><div class="skill-progress"></div></div>
         </div>
-
-        <!-- Angular -->
-        <div class="skill-tile" role="listitem" data-aos="zoom-in" data-aos-delay="200">
+        <div class="skill-tile" data-skill="65">
           <div class="icon-wrap">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg" alt="Angular icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg" alt="Angular">
           </div>
           <div class="skill-name">Angular</div>
+          <div class="skill-level"><div class="skill-progress"></div></div>
         </div>
-
-        <!-- Python -->
-        <div class="skill-tile" role="listitem" data-aos="zoom-in" data-aos-delay="230">
+        <div class="skill-tile" data-skill="95">
           <div class="icon-wrap">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python">
           </div>
           <div class="skill-name">Python</div>
+          <div class="skill-level"><div class="skill-progress"></div></div>
         </div>
-
-        <!-- Django -->
-        <div class="skill-tile" role="listitem" data-aos="zoom-in" data-aos-delay="260">
+        <div class="skill-tile" data-skill="90">
           <div class="icon-wrap">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg" alt="Django icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg" alt="Django">
           </div>
           <div class="skill-name">Django</div>
+          <div class="skill-level"><div class="skill-progress"></div></div>
         </div>
-
-        <!-- MySQL -->
-        <div class="skill-tile" role="listitem" data-aos="zoom-in" data-aos-delay="290">
+        <div class="skill-tile" data-skill="85">
           <div class="icon-wrap">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL">
           </div>
           <div class="skill-name">MySQL</div>
+          <div class="skill-level"><div class="skill-progress"></div></div>
         </div>
       </div>
     </div>
@@ -263,37 +587,50 @@
   <!-- Projects -->
   <section id="projects" class="py-5">
     <div class="container" data-aos="fade-up">
-      <h2 class="text-center">Projects</h2>
-      <div class="row g-4 mt-3">
-        <div class="col-md-6 col-lg-4" data-aos="zoom-in" data-aos-delay="50">
-          <div class="card shadow-sm h-100 border-0 overflow-hidden">
-            <img src="static/image/Screenshot 2025-08-29 174224.png" class="card-img-top project-img" alt="Fitness Empire screenshot">
+      <h2 class="text-center mb-5">Featured Projects</h2>
+      <div class="row g-4">
+        <div class="col-lg-4 col-md-6 fade-in">
+          <div class="card h-100">
+            <img src="static/image/Screenshot 2025-08-29 174224.png" class="card-img-top project-img" alt="Fitness Empire">
             <div class="card-body">
               <h5 class="card-title">Fitness Empire</h5>
-              <p class="card-text muted-text">A full-stack gym management platform with membership system, payments, and workout tracking.</p>
-              <a href="https://ajitpandey.pythonanywhere.com/" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">View Project</a>
+              <p class="card-text">A full-stack gym management platform with membership system, payments, and workout tracking.</p>
+              <div class="tech-badges">
+                <span class="tech-badge">Django</span>
+                <span class="tech-badge">Python</span>
+                <span class="tech-badge">SQL</span>
+              </div>
+              <a href="https://ajitpandey.pythonanywhere.com/" target="_blank" class="btn btn-outline-primary mt-3">View Project</a>
             </div>
           </div>
         </div>
-
-        <div class="col-md-6 col-lg-4" data-aos="zoom-in" data-aos-delay="90">
-          <div class="card shadow-sm h-100 border-0 overflow-hidden">
-            <img src="static/image/Screenshot 2025-08-29 174113.png" class="card-img-top project-img" alt="Bookshop screenshot">
+        <div class="col-lg-4 col-md-6 fade-in">
+          <div class="card h-100">
+            <img src="static/image/Screenshot 2025-08-29 174113.png" class="card-img-top project-img" alt="Bookshop">
             <div class="card-body">
               <h5 class="card-title">Online Bookshop</h5>
-              <p class="card-text muted-text">An online bookstore built with categories, cart, and order management.</p>
-              <a href="https://ajit1211.github.io/bookshop_/index.html" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">View Project</a>
+              <p class="card-text">An online bookstore built with categories, cart, and order management.</p>
+              <div class="tech-badges">
+                <span class="tech-badge">HTML</span>
+                <span class="tech-badge">CSS</span>
+                <span class="tech-badge">JS</span>
+              </div>
+              <a href="https://ajit1211.github.io/bookshop_/index.html" target="_blank" class="btn btn-outline-primary mt-3">View Project</a>
             </div>
           </div>
         </div>
-
-        <div class="col-md-6 col-lg-4" data-aos="zoom-in" data-aos-delay="130">
-          <div class="card shadow-sm h-100 border-0 overflow-hidden">
-            <img src="static/image/Screenshot 2025-09-01 124927.png" class="card-img-top project-img" alt="Hotel website screenshot">
+        <div class="col-lg-4 col-md-6 fade-in">
+          <div class="card h-100">
+            <img src="static/image/Screenshot 2025-09-01 124927.png" class="card-img-top project-img" alt="Hotel Website">
             <div class="card-body">
               <h5 class="card-title">Hotel Website</h5>
-              <p class="card-text muted-text">A dynamic hotel booking site with hero, any where food in india and contact form.</p>
-              <a href="https://ajit1211.github.io/Cultural_food/index.html" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">View Project</a>
+              <p class="card-text">A dynamic hotel booking site with hero, anywhere food in India and contact form.</p>
+              <div class="tech-badges">
+                <span class="tech-badge">React</span>
+                <span class="tech-badge">Bootstrap</span>
+                <span class="tech-badge">JS</span>
+              </div>
+              <a href="https://ajit1211.github.io/Cultural_food/index.html" target="_blank" class="btn btn-outline-primary mt-3">View Project</a>
             </div>
           </div>
         </div>
@@ -301,51 +638,76 @@
     </div>
   </section>
 
-  <!-- Internships -->
-  <section id="internships" class="py-5 bg-light">
+  <!-- Experience (Combined Internships & Education) -->
+  <section id="experience" class="py-5 bg-dark" style="background: var(--bg-darker);">
     <div class="container" data-aos="fade-up">
-      <h2 class="text-center">Internships</h2>
-      <ul class="list-group shadow-sm border-0 rounded-3 mt-3">
-        <li class="list-group-item py-3">Full-Stack Development Internship @ <strong>VIBGYOR ADVICORP PRIVATE LIMITED</strong> <a href="static/image/Ajit_pandey_internship.png">Link</a></li>
-        <li class="list-group-item py-3">AdEngage Internship (Python Full-Stack Web Developer)</li>
-      </ul>
+      <h2 class="text-center mb-5">Experience & Education</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <h5>Full-Stack Development Internship</h5>
+            <p>VIBGYOR ADVICORP PRIVATE LIMITED</p>
+            <small class="text-muted">2025 - Present</small>
+            <a href="static/image/Ajit_pandey_internship.png" class="btn btn-sm btn-outline-accent mt-2">View Cert</a>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <h5>AdEngage Internship (Python Full-Stack Web Developer)</h5>
+            <p>AdEngage</p>
+            <small class="text-muted">2024</small>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <h5>B.Sc in IT</h5>
+            <p>Mumbai University</p>
+            <small class="text-muted">2022 - 2025</small>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <h5>Professional Software Development (Python)</h5>
+            <p>IT Vedant</p>
+            <small class="text-muted">2024 - 2025</small>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- Certifications -->
   <section id="certifications" class="py-5">
     <div class="container" data-aos="fade-up">
-      <h2 class="text-center">Certifications</h2>
-      <div class="row g-4 mt-3">
-        <div class="col-md-4" data-aos="flip-left">
-          <div class="card shadow-sm h-100 border-0 overflow-hidden">
-            <img src="static/resume/python_215_1756468410.jpg" class="card-img-top cert-img" alt="Python Certification">
+      <h2 class="text-center mb-5">Certifications</h2>
+      <div class="row g-4">
+        <div class="col-md-4 fade-in">
+          <div class="card h-100">
+            <img src="static/resume/python_215_1756468410.jpg" class="card-img-top cert-img" alt="Python">
             <div class="card-body">
               <h5 class="card-title">Python Programming</h5>
-              <p class="card-text muted-text">IT Vedant — 2025</p>
-              <a href="static/resume/python_215_1756468410.jpg" target="_blank" rel="noopener" class="btn btn-sm btn-primary">View Certificate</a>
+              <p class="card-text">IT Vedant — 2025</p>
+              <a href="static/resume/python_215_1756468410.jpg" target="_blank" class="btn btn-primary">View</a>
             </div>
           </div>
         </div>
-
-        <div class="col-md-4" data-aos="flip-left" data-aos-delay="60">
-          <div class="card shadow-sm h-100 border-0 overflow-hidden">
+        <div class="col-md-4 fade-in">
+          <div class="card h-100">
             <img src="static/resume/corewebdesign_206_1756469160.jpg" class="card-img-top cert-img" alt="Core Web Design">
             <div class="card-body">
               <h5 class="card-title">Core Web Design</h5>
-              <p class="card-text muted-text">IT Vedant — 2024</p>
-              <a href="static/resume/corewebdesign_206_1756469160.jpg" target="_blank" rel="noopener" class="btn btn-sm btn-primary">View Certificate</a>
+              <p class="card-text">IT Vedant — 2024</p>
+              <a href="static/resume/corewebdesign_206_1756469160.jpg" target="_blank" class="btn btn-primary">View</a>
             </div>
           </div>
         </div>
-
-        <div class="col-md-4" data-aos="flip-left" data-aos-delay="120">
-          <div class="card shadow-sm h-100 border-0 overflow-hidden">
-            <img src="static/resume/sql_203_1756468379.jpg" class="card-img-top cert-img" alt="SQL Certification">
+        <div class="col-md-4 fade-in">
+          <div class="card h-100">
+            <img src="static/resume/sql_203_1756468379.jpg" class="card-img-top cert-img" alt="SQL">
             <div class="card-body">
               <h5 class="card-title">SQL</h5>
-              <p class="card-text muted-text">IT Vedant — 2024 </p>
-              <a href="static/resume/sql_203_1756468379.jpg" target="_blank" rel="noopener" class="btn btn-sm btn-primary">View Certificate</a>
+              <p class="card-text">IT Vedant — 2024</p>
+              <a href="static/resume/sql_203_1756468379.jpg" target="_blank" class="btn btn-primary">View</a>
             </div>
           </div>
         </div>
@@ -353,66 +715,72 @@
     </div>
   </section>
 
-  <!-- Education -->
-  <section id="education" class="py-5 bg-light">
-    <div class="container" data-aos="fade-up">
-      <h2 class="text-center">Education</h2>
-      <ul class="list-group shadow-sm border-0 rounded-3 mt-3">
-        <li class="list-group-item py-3">B.Sc in IT — Mumbai University</li>
-        <li class="list-group-item py-3">Professional Software Development (Python) — IT Vedant</li>
-      </ul>
-    </div>
-  </section>
-
   <!-- Testimonials -->
-  <section id="testimonials" class="py-5">
+  <section id="testimonials" class="py-5 bg-dark" style="background: var(--bg-darker);">
     <div class="container" data-aos="fade-up">
-      <h2 class="text-center">What People Say</h2>
-      <div id="testimonialCarousel" class="carousel slide mt-3" data-bs-ride="carousel">
-        <div class="carousel-inner text-center">
+      <h2 class="text-center mb-5">What People Say</h2>
+      <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
           <div class="carousel-item active">
-            <blockquote class="blockquote">
-              <p>"Ajit is a dedicated developer with great problem-solving skills."</p>
-              <footer class="blockquote-footer">Mentor at IT Vedant</footer>
-            </blockquote>
+            <div class="row justify-content-center">
+              <div class="col-md-8">
+                <blockquote class="blockquote text-center">
+                  <p>"Ajit is a dedicated developer with great problem-solving skills."</p>
+                  <footer class="blockquote-footer">Mentor at IT Vedant</footer>
+                </blockquote>
+              </div>
+            </div>
           </div>
           <div class="carousel-item">
-            <blockquote class="blockquote">
-              <p>"His projects are clean, scalable, and user-friendly."</p>
-              <footer class="blockquote-footer">Teammate</footer>
-            </blockquote>
+            <div class="row justify-content-center">
+              <div class="col-md-8">
+                <blockquote class="blockquote text-center">
+                  <p>"His projects are clean, scalable, and user-friendly."</p>
+                  <footer class="blockquote-footer">Teammate</footer>
+                </blockquote>
+              </div>
+            </div>
           </div>
         </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        </button>
       </div>
     </div>
   </section>
 
   <!-- Contact -->
-  <section id="contact" class="py-5 bg-light">
+  <section id="contact" class="py-5">
     <div class="container" data-aos="fade-up">
-      <h2 class="text-center">Contact Me</h2>
-      <form action="https://formspree.io/f/your-form-id" method="post" class="row g-3 mt-3">
-        <div class="col-md-6"><input type="text" name="name" class="form-control shadow-sm" placeholder="Your Name" required></div>
-        <div class="col-md-6"><input type="email" name="email" class="form-control shadow-sm" placeholder="Your Email" required></div>
-        <div class="col-12"><textarea name="message" rows="5" class="form-control shadow-sm" placeholder="Your Message" required></textarea></div>
-        <div class="col-12 text-center"><button type="submit" class="btn btn-primary px-5 shadow-sm">Send Message</button></div>
+      <h2 class="text-center mb-5">Get In Touch</h2>
+      <form action="https://formspree.io/f/your-form-id" method="post" class="row g-3 justify-content-center">
+        <div class="col-md-6"><input type="text" name="name" class="form-control" placeholder="Your Name" required></div>
+        <div class="col-md-6"><input type="email" name="email" class="form-control" placeholder="Your Email" required></div>
+        <div class="col-12"><textarea name="message" rows="5" class="form-control" placeholder="Your Message" required></textarea></div>
+        <div class="col-12 text-center"><button type="submit" class="btn btn-primary px-5">Send Message</button></div>
       </form>
+      <div class="contact-map fade-in">
+        <i class="bi bi-geo-alt fs-1"></i> Mumbai, India
+      </div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="mt-auto border-top py-4">
-    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center small text-muted">
-      <div>© 2025 Ajit Pandey</div>
-      <div class="d-flex gap-3">
-        <a href="https://github.com/ajit1211" target="_blank" rel="noopener" class="text-decoration-none"><i class="bi bi-github"></i> GitHub</a>
-        <a href="https://linkedin.com/in/pandey1211" target="_blank" rel="noopener" class="text-decoration-none"><i class="bi bi-linkedin"></i> LinkedIn</a>
+  <footer class="py-4">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center text-muted">
+      <div>© 2025 Ajit Pandey. Built with ❤️</div>
+      <div class="d-flex gap-4">
+        <a href="https://github.com/ajit1211" class="social-link" target="_blank"><i class="bi bi-github fs-5"></i></a>
+        <a href="https://linkedin.com/in/pandey1211" class="social-link" target="_blank"><i class="bi bi-linkedin fs-5"></i></a>
       </div>
     </div>
   </footer>
 
-  <!-- Back to Top Button -->
-  <button id="back-to-top" class="btn btn-primary rounded-pill shadow-sm" aria-label="Back to top">
+  <!-- Back to Top -->
+  <button id="back-to-top" class="btn position-fixed">
     <i class="bi bi-arrow-up"></i>
   </button>
 
@@ -422,32 +790,131 @@
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
 
   <script>
+    // GSAP Registration
+    gsap.registerPlugin(ScrollTrigger);
+
     // Typed Hero Text
     new Typed("#typed", {
-      strings: ["Full-Stack Developer", "Python & Django", "MERN Stack", "SQL Enthusiast"],
-      typeSpeed: 60, backSpeed: 40, loop: true
+      strings: ["Full-Stack Developer", "Python & Django Expert", "MERN Stack Enthusiast", "Building the Future"],
+      typeSpeed: 50, backSpeed: 30, loop: true, showCursor: false
     });
 
-    // AOS init
-    AOS.init({ duration: 800, once: true });
+    // Particles.js
+    particlesJS('particles-js', {
+      particles: {
+        number: { value: 80, density: { enable: true, value_area: 800 } },
+        color: { value: '#ffd400' },
+        shape: { type: 'circle' },
+        opacity: { value: 0.5, random: true },
+        size: { value: 3, random: true },
+        line_linked: { enable: true, distance: 150, color: '#ffd400', opacity: 0.4, width: 1 },
+        move: { enable: true, speed: 2, direction: 'none', random: false, straight: false, out_mode: 'out', bounce: false }
+      },
+      interactivity: {
+        detect_on: 'canvas',
+        events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' }, resize: true },
+        modes: { repulse: { distance: 100, duration: 0.4 }, push: { particles_nb: 4 } }
+      },
+      retina_detect: true
+    });
 
-    // Theme toggle (light/dark) with localStorage & icon switch
+    // AOS Init
+    AOS.init({ duration: 1000, once: true });
+
+    // Theme Toggle
     const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
     const lightIcon = themeToggle.querySelector('.light-icon');
     const darkIcon = themeToggle.querySelector('.dark-icon');
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.body.dataset.bsTheme = savedTheme;
-    if (savedTheme === 'dark') { lightIcon.style.display = 'none'; darkIcon.style.display = 'inline-block'; }
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    body.dataset.bsTheme = savedTheme;
+    if (savedTheme === 'light') { 
+      lightIcon.style.display = 'inline-block'; 
+      darkIcon.style.display = 'none'; 
+    }
 
     themeToggle.addEventListener('click', () => {
-      const current = document.body.dataset.bsTheme === 'light' ? 'dark' : 'light';
-      document.body.dataset.bsTheme = current;
+      const current = body.dataset.bsTheme === 'dark' ? 'light' : 'dark';
+      body.dataset.bsTheme = current;
       localStorage.setItem('theme', current);
-      if (current === 'dark') { lightIcon.style.display = 'none'; darkIcon.style.display = 'inline-block'; }
-      else { lightIcon.style.display = 'inline-block'; darkIcon.style.display = 'none'; }
+      lightIcon.style.display = current === 'light' ? 'inline-block' : 'none';
+      darkIcon.style.display = current === 'dark' ? 'inline-block' : 'none';
     });
 
-    // Back to top show/hide + smooth scroll
+    // Custom Cursor
+    const cursor = document.querySelector('.cursor');
+    const follower = document.querySelector('.cursor-follower');
+    document.addEventListener('mousemove', (e) => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+      setTimeout(() => {
+        follower.style.left = e.clientX + 'px';
+        follower.style.top = e.clientY + 'px';
+      }, 100);
+    });
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => follower.classList.add('hover'));
+      el.addEventListener('mouseleave', () => follower.classList.remove('hover'));
+    });
+
+    // Skill Progress Animation
+    gsap.to(".skill-progress", {
+      width: (i, el) => $(el).parent().parent().data('skill') + '%',
+      duration: 1.5,
+      ease: "power2.out",
+      stagger: 0.1,
+      scrollTrigger: {
+        trigger: "#skills",
+        start: "top 80%"
+      }
+    });
+
+    // Stats Counter
+    function animateCounter(id, target) {
+      let count = 0;
+      const increment = target / 100;
+      const timer = setInterval(() => {
+        count += increment;
+        document.getElementById(id).textContent = Math.ceil(count);
+        if (count >= target) {
+          document.getElementById(id).textContent = target;
+          clearInterval(timer);
+        }
+      }, 20);
+    }
+    ScrollTrigger.create({
+      trigger: "#about",
+      start: "top 80%",
+      onEnter: () => {
+        animateCounter('projects-count', 3);
+        animateCounter('skills-count', 9);
+        animateCounter('internships-count', 2);
+        animateCounter('certs-count', 3);
+      }
+    });
+
+    // Fade In on Scroll
+    const fadeIns = document.querySelectorAll('.fade-in');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    });
+    fadeIns.forEach(el => observer.observe(el));
+
+    // Navbar Scroll Effect
+    window.addEventListener('scroll', () => {
+      const navbar = document.getElementById('navbar');
+      if (window.scrollY > 100) {
+        navbar.style.background = 'rgba(10,10,10,0.98)';
+      } else {
+        navbar.style.background = 'rgba(10,10,10,0.95)';
+      }
+    });
+
+    // Back to Top
     const backToTop = document.getElementById('back-to-top');
     window.addEventListener('scroll', () => {
       backToTop.style.display = window.scrollY > 300 ? 'block' : 'none';
