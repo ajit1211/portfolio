@@ -15,9 +15,9 @@
   <!-- AOS (scroll animations) -->
   <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
 
-  <!-- Custom Inline CSS (you can move to static/css/style.css) -->
+  <!-- Custom Inline CSS -->
   <style>
-    :root{
+    :root {
       --bg-dark: #0b0b0b;
       --card-dark: #2c2c2c;
       --muted: #6c757d;
@@ -27,21 +27,20 @@
     html { scroll-behavior: smooth; }
     body { font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: white; color: #222; }
 
-    /* --- Navbar --- */
+    /* Navbar */
     .navbar { background: var(--bg-light); }
     .navbar-brand { font-weight: 600; }
     .nav-link { cursor: pointer; }
 
-    /* --- Hero --- */
-    #hero { padding: 4.5rem 0; text-align:center; background: linear-gradient(180deg,#fff 0%, #f8f9fa 100%); }
+    /* Hero */
+    #hero { padding: 4.5rem 0; text-align: center; background: linear-gradient(180deg, #fff 0%, #f8f9fa 100%); }
     #hero img { object-fit: cover; }
 
-    /* --- Section Titles --- */
+    /* Section Titles */
     section h2 { font-weight: 700; margin-bottom: 1.5rem; }
-    /* Muted lead text */
     .lead.muted { color: var(--muted); }
 
-    /* --- Skills (styled to match screenshot) --- */
+    /* Skills */
     #skills { background: var(--bg-dark); padding: 3.5rem 0; color: #fff; }
     #skills .section-title { color: var(--accent); text-shadow: 0 3px 14px rgba(0,0,0,0.6); font-size: 2rem; margin-bottom: 2rem; }
 
@@ -100,6 +99,30 @@
       background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
     }
 
+    /* Contact Form */
+    #contact { padding: 3.5rem 0; background: #f8f9fa; }
+    #contact form { max-width: 600px; margin: 0 auto; }
+    #contact input, #contact textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    #contact textarea { min-height: 150px; resize: vertical; }
+    #contact button {
+      background: var(--accent);
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      color: white;
+      font-weight: 600;
+      transition: background 0.3s ease;
+      background-color: black;
+    }
+    #contact button:hover { background: white;color: black; border: 2px solid; }
+
     /* Responsive */
     @media (max-width: 576px) {
       .skill-tile { width: 120px; min-height: 130px; padding: 14px; }
@@ -107,15 +130,15 @@
       .skill-tile img { width: 36px; height: 36px; }
     }
 
-    /* --- Projects small tweaks --- */
+    /* Projects */
     .project-img { transition: transform 0.4s ease; border-radius: 6px; }
     .project-img:hover { transform: scale(1.03); }
     .card-body { transition: background .25s ease; }
 
-    /* --- Footer --- */
+    /* Footer */
     footer { background: #f8f9fa; }
 
-    /* --- Back to top --- */
+    /* Back to top */
     #back-to-top { position: fixed; right: 22px; bottom: 22px; z-index: 999; display: none; }
 
     /* Small utility */
@@ -142,7 +165,6 @@
           <li class="nav-item"><a class="nav-link" href="#testimonials">Testimonials</a></li>
           <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
         </ul>
-
         <button id="theme-toggle" class="btn btn-sm ms-3" aria-label="Toggle theme">
           <i class="bi bi-moon-fill light-icon" style="display:inline-block;"></i>
           <i class="bi bi-sun-fill dark-icon" style="display:none;"></i>
@@ -157,7 +179,6 @@
       <img src="static/image/ajit.jpg" alt="Ajit Pandey" class="rounded-circle mb-3 shadow-lg border border-3 border-white" width="180" height="180">
       <h1 class="fw-bold">Ajit Pandey</h1>
       <p class="lead muted-text"><span id="typed"></span></p>
-
       <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
         <a href="#projects" class="btn btn-primary px-4 shadow-sm">🚀 View My Work</a>
         <a href="#contact" class="btn btn-outline-secondary px-4 shadow-sm">📩 Contact Me</a>
@@ -177,79 +198,61 @@
     </div>
   </section>
 
-  <!-- Skills (final, polished) -->
+  <!-- Skills -->
   <section id="skills" aria-label="Skills">
     <div class="container" data-aos="fade-up">
       <div class="text-center">
         <h2 class="section-title">My Skills</h2>
       </div>
-
       <div class="skills-grid mt-4" role="list">
-        <!-- HTML -->
         <div class="skill-tile" role="listitem" data-aos="zoom-in" data-aos-delay="50">
           <div class="icon-wrap">
             <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5 icon">
           </div>
           <div class="skill-name">HTML</div>
         </div>
-
-        <!-- CSS -->
         <div class="skill-tile" role="listitem" data-aos="zoom-in" data-aos-delay="80">
           <div class="icon-wrap">
             <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3 icon">
           </div>
           <div class="skill-name">CSS</div>
         </div>
-
-        <!-- Bootstrap -->
         <div class="skill-tile" role="listitem" data-aos="zoom-in" data-aos-delay="110">
           <div class="icon-wrap">
             <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" alt="Bootstrap icon">
           </div>
           <div class="skill-name">Bootstrap</div>
         </div>
-
-        <!-- JavaScript -->
         <div class="skill-tile" role="listitem" data-aos="zoom-in" data-aos-delay="140">
           <div class="icon-wrap">
             <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript icon">
           </div>
           <div class="skill-name">JavaScript</div>
         </div>
-
-        <!-- React -->
         <div class="skill-tile" role="listitem" data-aos="zoom-in" data-aos-delay="170">
           <div class="icon-wrap">
             <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React icon">
           </div>
           <div class="skill-name">React</div>
         </div>
-
-        <!-- Angular -->
         <div class="skill-tile" role="listitem" data-aos="zoom-in" data-aos-delay="200">
           <div class="icon-wrap">
             <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg" alt="Angular icon">
           </div>
           <div class="skill-name">Angular</div>
         </div>
-
-        <!-- Python -->
         <div class="skill-tile" role="listitem" data-aos="zoom-in" data-aos-delay="230">
           <div class="icon-wrap">
             <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python icon">
           </div>
           <div class="skill-name">Python</div>
         </div>
-
-        <!-- Django -->
         <div class="skill-tile" role="listitem" data-aos="zoom-in" data-aos-delay="260">
           <div class="icon-wrap">
             <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg" alt="Django icon">
           </div>
           <div class="skill-name">Django</div>
         </div>
-
-        <!-- MySQL -->
         <div class="skill-tile" role="listitem" data-aos="zoom-in" data-aos-delay="290">
           <div class="icon-wrap">
             <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL icon">
@@ -275,7 +278,6 @@
             </div>
           </div>
         </div>
-
         <div class="col-md-6 col-lg-4" data-aos="zoom-in" data-aos-delay="90">
           <div class="card shadow-sm h-100 border-0 overflow-hidden">
             <img src="static/image/Screenshot 2025-08-29 174113.png" class="card-img-top project-img" alt="Bookshop screenshot">
@@ -286,7 +288,6 @@
             </div>
           </div>
         </div>
-
         <div class="col-md-6 col-lg-4" data-aos="zoom-in" data-aos-delay="130">
           <div class="card shadow-sm h-100 border-0 overflow-hidden">
             <img src="static/image/Screenshot 2025-09-01 124927.png" class="card-img-top project-img" alt="Hotel website screenshot">
@@ -323,29 +324,47 @@
             <div class="card-body">
               <h5 class="card-title">Python Programming</h5>
               <p class="card-text muted-text">IT Vedant — 2025</p>
-              <a href="static/resume/python_215_1756468410.jpg" target="_blank" rel="noopener" class="btn btn-sm btn-primary">View Certificate</a>
+              <a href="static/resume/python_215_1756468410.jpg" target="_blank" rel="noopener" class="btn btn-sm btn-dark">View Certificate</a>
             </div>
           </div>
         </div>
-
         <div class="col-md-4" data-aos="flip-left" data-aos-delay="60">
           <div class="card shadow-sm h-100 border-0 overflow-hidden">
             <img src="static/resume/corewebdesign_206_1756469160.jpg" class="card-img-top cert-img" alt="Core Web Design">
             <div class="card-body">
               <h5 class="card-title">Core Web Design</h5>
               <p class="card-text muted-text">IT Vedant — 2024</p>
-              <a href="static/resume/corewebdesign_206_1756469160.jpg" target="_blank" rel="noopener" class="btn btn-sm btn-primary">View Certificate</a>
+              <a href="static/resume/corewebdesign_206_1756469160.jpg" target="_blank" rel="noopener" class="btn btn-sm btn-dark">View Certificate</a>
             </div>
           </div>
         </div>
-
         <div class="col-md-4" data-aos="flip-left" data-aos-delay="120">
           <div class="card shadow-sm h-100 border-0 overflow-hidden">
             <img src="static/resume/sql_203_1756468379.jpg" class="card-img-top cert-img" alt="SQL Certification">
             <div class="card-body">
               <h5 class="card-title">SQL</h5>
-              <p class="card-text muted-text">IT Vedant — 2024 </p>
-              <a href="static/resume/sql_203_1756468379.jpg" target="_blank" rel="noopener" class="btn btn-sm btn-primary">View Certificate</a>
+              <p class="card-text muted-text">IT Vedant — 2024</p>
+              <a href="static/resume/sql_203_1756468379.jpg" target="_blank" rel="noopener" class="btn btn-sm btn-dark">View Certificate</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4" data-aos="flip-left" data-aos-delay="120">
+          <div class="card shadow-sm h-100 border-0 overflow-hidden">
+            <img src="static/image/ibm cer.png" class="card-img-top cert-img" alt="Python for Web Development Certification">
+            <div class="card-body">
+              <h5 class="card-title">Python For Web Development</h5>
+              <p class="card-text muted-text">IT Vedant — 2024</p>
+              <a href="static/image/ibm_ajit_pandey.pdf" target="_blank" rel="noopener" class="btn btn-sm btn-dark">View Certificate</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4" data-aos="flip-left" data-aos-delay="120">
+          <div class="card shadow-sm h-100 border-0 overflow-hidden">
+            <img src="static/image/full stack python dev.jpg" class="card-img-top cert-img" alt="Full Stack Python Developer Certification">
+            <div class="card-body">
+              <h5 class="card-title">Full Stack Python Developer (A+)</h5>
+              <p class="card-text muted-text">IT Vedant — 2024</p>
+              <a href="static/image/full stack python dev.jpg" target="_blank" rel="noopener" class="btn btn-sm btn-dark">View Certificate</a>
             </div>
           </div>
         </div>
@@ -388,14 +407,14 @@
   </section>
 
   <!-- Contact -->
-  <section id="contact" class="py-5 bg-light">
+  <section id="contact" class="py-5">
     <div class="container" data-aos="fade-up">
       <h2 class="text-center">Contact Me</h2>
-      <form action="https://formspree.io/f/your-form-id" method="post" class="row g-3 mt-3">
-        <div class="col-md-6"><input type="text" name="name" class="form-control shadow-sm" placeholder="Your Name" required></div>
-        <div class="col-md-6"><input type="email" name="email" class="form-control shadow-sm" placeholder="Your Email" required></div>
-        <div class="col-12"><textarea name="message" rows="5" class="form-control shadow-sm" placeholder="Your Message" required></textarea></div>
-        <div class="col-12 text-center"><button type="submit" class="btn btn-primary px-5 shadow-sm">Send Message</button></div>
+      <form id="contact-form">
+        <input type="text" id="name" name="name" placeholder="Your Name" required>
+        <input type="email" id="email" name="email" placeholder="Your Email" required>
+        <textarea id="message" name="message" placeholder="Your Message" required></textarea>
+        <button type="submit">Send Message</button>
       </form>
     </div>
   </section>
@@ -420,12 +439,15 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js"></script>
 
   <script>
     // Typed Hero Text
     new Typed("#typed", {
       strings: ["Full-Stack Developer", "Python & Django", "MERN Stack", "SQL Enthusiast"],
-      typeSpeed: 60, backSpeed: 40, loop: true
+      typeSpeed: 60,
+      backSpeed: 40,
+      loop: true
     });
 
     // AOS init
@@ -453,6 +475,58 @@
       backToTop.style.display = window.scrollY > 300 ? 'block' : 'none';
     });
     backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // EmailJS Contact Form with Auto-Reply
+    (function() {
+      emailjs.init("U_Yc4bGPLcfV2K3i3"); // Replace with your Public Key
+    })();
+
+    document.getElementById("contact-form").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      // Get form values
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const message = document.getElementById("message").value.trim();
+      const time = new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }); // 02:37 PM IST, September 23, 2025
+
+      console.log("Form Data:", { name, email, message, time });
+
+      // Validate email
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        alert("❌ Please enter a valid email address.");
+        return;
+      }
+
+      // Send email to you
+      emailjs.send("service_ytd30y6", "template_cbsqhg7", {
+        name: name,
+        from_email: email,
+        message: message,
+        time: time
+      })
+      .then(function(response) {
+        console.log("Original email sent:", response);
+        // Send auto-reply to the user
+        emailjs.send("service_ytd30y6", "template_xg635gl", {
+          name: name,
+          from_email: email,
+          message: message,
+          time: time,
+          to_email: email
+        })
+        .then(function(response) {
+          console.log("Auto-reply sent:", response);
+          alert("✅ Message sent successfully! An auto-reply has been sent to " + email);
+        }, function(error) {
+          console.error("Auto-reply error:", error);
+          alert("✅ Message sent to Ajit, but auto-reply failed. " + JSON.stringify(error));
+        });
+      }, function(error) {
+        console.error("Original email error:", error);
+        alert("❌ Failed to send message. " + JSON.stringify(error));
+      });
+    });
   </script>
 </body>
 </html>
