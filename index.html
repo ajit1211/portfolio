@@ -687,32 +687,86 @@
     });
     backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-    // EmailJS – replace the placeholders with your own keys
-    (function () { emailjs.init("YOUR_PUBLIC_KEY"); })();
+    // // EmailJS – replace the placeholders with your own keys
+    // (function () { emailjs.init("U_Yc4bGPLcfV2K3i3"); })();
 
-    document.getElementById("contact-form").addEventListener("submit", function (e) {
-      e.preventDefault();
-      const name = this.name.value.trim();
-      const email = this.email.value.trim();
-      const message = this.message.value.trim();
-      const time = new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
+    // document.getElementById("contact-form").addEventListener("submit", function (e) {
+    //   e.preventDefault();
+    //   const name = this.name.value.trim();
+    //   const email = this.email.value.trim();
+    //   const message = this.message.value.trim();
+    //   const time = new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
 
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        alert("Please enter a valid email.");
-        return;
-      }
+    //   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    //     alert("Please enter a valid email.");
+    //     return;
+    //   }
 
-      emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", { name, from_email: email, message, time })
-        .then(() => emailjs.send("YOUR_SERVICE_ID", "YOUR_AUTO_REPLY_TEMPLATE_ID", { name, from_email: email, message, time, to_email: email }))
-        .then(() => {
-          alert("Message sent! Auto-reply delivered.");
-          this.reset();
-        })
-        .catch(err => {
-          console.error(err);
-          alert("Something went wrong – check the console.");
-        });
-    });
+    //   emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", { name, from_email: email, message, time })
+    //     .then(() => emailjs.send("YOUR_SERVICE_ID", "YOUR_AUTO_REPLY_TEMPLATE_ID", { name, from_email: email, message, time, to_email: email }))
+    //     .then(() => {
+    //       alert("Message sent! Auto-reply delivered.");
+    //       this.reset();
+    //     })
+    //     .catch(err => {
+    //       console.error(err);
+    //       alert("Something went wrong – check the console.");
+    //     });
+    // });
   </script>
+
+<!-- EmailJS CDN (REQUIRED) -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js"></script>
+<!-- EmailJS CDN (REQUIRED) -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js"></script>
+
+<script>
+  /* ========== Public Key ========== */
+  const EMAILJS_PUBLIC_KEY = "U_Yc4bGPLcfV2K3i3";
+
+  /* ========== Service + Templates ========== */
+  const SERVICE_ID = "service_ytd30y6";
+  const TEMPLATE_ID_CONTACT = "template_cbsqhg7";   // sends to YOU
+  const TEMPLATE_ID_REPLY   = "template_xg635gl";   // auto-reply to USER
+
+  // Initialize EmailJS
+  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+
+  const form = document.getElementById("contact-form");
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const params = {
+      name: document.getElementById("name").value.trim(),
+      from_email: document.getElementById("email").value.trim(),
+      message: document.getElementById("message").value.trim(),
+      time: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+    };
+
+    // Step 1 → Send message to YOU
+    emailjs.send(SERVICE_ID, TEMPLATE_ID_CONTACT, params)
+      .then(() => {
+
+        // Step 2 → Auto reply to user
+        const replyParams = {
+          name: params.name,
+          to_email: params.from_email,
+          time: params.time
+        };
+
+        return emailjs.send(SERVICE_ID, TEMPLATE_ID_REPLY, replyParams);
+      })
+      .then(() => {
+        alert("Message sent successfully! Auto-reply delivered.");
+        form.reset();
+      })
+      .catch((err) => {
+        console.error("EmailJS Error:", err);
+        alert("Error sending message. Check console for details.");
+      });
+  });
+</script>
+
 </body>
 </html>
